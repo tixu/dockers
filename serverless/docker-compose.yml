@@ -1,0 +1,65 @@
+version: '3.2'
+
+services:
+    fn:
+      image: fnproject/functions
+      restart: always
+      privileged: true
+      environment:
+        - DB_URL=postgres://funcs:funcs@db/funcs?sslmode=disable
+        - MQ_URL=redis://redis:6379
+        - ZIPKIN_URL=http://zipkin:9411/api/v1/spans
+      ports:
+        - 8080:8080
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      depends_on:
+        - db
+        - redis
+      healthcheck:
+         test: wget --spider http://localhost:8080 || exit 1
+         interval: 30s
+         timeout: 10s
+         retries: 3  
+      networks:
+          - overlay
+          - prometheus
+
+    fn-ui:
+      image: fnproject/ui
+      restart: always
+      ports:
+        - 5000:4000
+      environment:
+        - API_URL=http://fn:8080
+  
+    db:
+      image: postgres:10
+      restart: always
+      environment:
+        - POSTGRES_PASSWORD=funcs
+        - POSTGRES_USER=funcs
+        - POSTGES_DB=funcs
+      healthcheck:
+         test: pg_isready || exit 1
+         interval: 30s
+         timeout: 10s
+         retries: 3  
+    
+    redis:
+      image: redis
+      restart: always
+      healthcheck:
+         test: redis-cli ping || exit 1
+         interval: 30s
+         timeout: 10s
+         retries: 3  
+ 
+networks:
+    default: 
+       external: 
+          name: overlay
+    prometheus:
+         external: true
+    overlay:
+         external: true
