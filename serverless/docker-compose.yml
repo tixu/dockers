@@ -4,7 +4,6 @@ services:
     fn:
       image: fnproject/functions
       restart: always
-      privileged: true
       environment:
         - DB_URL=postgres://funcs:funcs@db/funcs?sslmode=disable
         - MQ_URL=redis://redis:6379
@@ -24,6 +23,14 @@ services:
       networks:
           - overlay
           - prometheus
+    fnflow:
+      image: fnproject/flow
+      restart: always
+      ports:
+         - 8081:8081
+      environment:
+         - API_URL=http://fn:8080/r
+
 
     fn-ui:
       image: fnproject/ui

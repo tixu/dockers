@@ -44,39 +44,39 @@ services:
          com.docker.service.name: "grafana"
 
 
-    cadvisor:
-      image: google/cadvisor:latest
-      ports:
-         - "8081:8080"
-      volumes:
-         - /:/rootfs:ro
-         - /var/run:/var/run:rw
-         - /sys:/sys:ro
-         - /var/lib/docker/:/var/lib/docker:ro
-      networks:
-         - overlay
-         - prometheus
-      labels:
-            com.docker.stack.namespace: "monitoring"
-            com.docker.service.name: "cadvisor"   
+         #      cadvisor:
+         #     image: google/cadvisor:latest
+         #      ports:
+         #         - "8081:8080"
+         #      volumes:
+         #         - /:/rootfs:ro
+         #        - /var/run:/var/run:rw
+         #         - /sys:/sys:ro
+         #         - /var/lib/docker/:/var/lib/docker:ro
+         #      networks:
+         #         - overlay
+         #         - prometheus
+         #      labels:
+         #            com.docker.stack.namespace: "monitoring"
+         #   com.docker.service.name: "cadvisor"   
 
-    node-exporter:
-        image: basi/node-exporter:v0.1.1
-        ports:
-            - "9100:9100"
-        networks:
-            - prometheus
-        environment:
-            - HOST_HOSTNAME=/etc/hostname
-        volumes:
-            - /proc:/host/proc
-            - /sys:/host/sys
-            - /:/rootfs
-            - /etc/hostname:/etc/hostname
-        command: [ -collector.procfs=/host/proc,-collector.sysfs=/host/proc,-collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)",-collector.textfile.directory=/etc/node-exporter/]
-        labels:
-            com.docker.stack.namespace: "monitoring"
-            com.docker.service.name: "node-exporter"
+         #    node-exporter:
+         #       image: basi/node-exporter:v0.1.1
+         #        ports:
+         #   - "9100:9100"
+         #networks:
+         #   - prometheus
+         #environment:
+         #   - HOST_HOSTNAME=/etc/hostname
+         #volumes:
+         #   - /proc:/host/proc
+         #   - /sys:/host/sys
+         #   - /:/rootfs
+         #   - /etc/hostname:/etc/hostname
+         #command: [ -collector.procfs=/host/proc,-collector.sysfs=/host/proc,-collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)",-collector.textfile.directory=/etc/node-exporter/]
+         #labels:
+         #   com.docker.stack.namespace: "monitoring"
+         #   com.docker.service.name: "node-exporter"
 
  
 networks:

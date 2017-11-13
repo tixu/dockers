@@ -90,8 +90,8 @@
 		},
 		"webhook": {
 			"1": {
-				"enable": false,
-				"endpoint": "http://localhost:3000/"
+				"enable": true,
+				"endpoint": "http://fn:8080/r/minio/echo"
 			}
 		},
 		"mysql": {
